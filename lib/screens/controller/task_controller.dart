@@ -23,24 +23,53 @@ class TaskController extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+  String? _error;
+  String? get error => _error;
 
   XFile? _picture;
   XFile? get picture => _picture;
 
-
-  getCurrentPosition() async{
+  Future<void> getCurrentPosition() async{
     _isLoading = true;
+    _error = null;
     notifyListeners();
 
-    await Geolocator.isLocationServiceEnabled();
+    final isServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!isServiceEnabled) {
+      _isLoading = false;
+      _error = 'Layanan lokasi tidak aktif. Aktifkan GPS lalu coba lagi.';
+      notifyListeners();
+      return;
+    }
 
-    await Geolocator.checkPermission();
+    var permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+    if (permission == LocationPermission.denied) {
+      _isLoading = false;
+      _error = 'Izin lokasi ditolak. Berikan izin untuk melanjutkan.';
+      notifyListeners();
+      return;
+    }
+    if (permission == LocationPermission.deniedForever) {
+      _isLoading = false;
+      _error =
+          'Izin lokasi ditolak permanen. Buka pengaturan untuk mengaktifkan.';
+      notifyListeners();
+      return;
+    }
 
+    await _streamCurrentPosition?.cancel();
     _streamCurrentPosition = Geolocator.getPositionStream(
       locationSettings: LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 1)
     ).listen((position){
       _currentPosition = position;
       _isLoading = false;
+      notifyListeners();
+    }, onError: (_) {
+      _isLoading = false;
+      _error = 'Gagal mendapatkan lokasi. Coba lagi.';
       notifyListeners();
     });
   }

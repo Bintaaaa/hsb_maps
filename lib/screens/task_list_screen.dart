@@ -18,9 +18,14 @@ class TaskListScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                LocationStatusCard(isLoading: state.isLoading, position: state.currentPosition, error: null, onRetry: (){},),
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                LocationStatusCard(
+                  isLoading: state.isLoading,
+                  position: state.currentPosition,
+                  error: state.error,
+                  onRetry: () => state.getCurrentPosition(),
+                ),
 
                 ElevatedButton(onPressed: (){
                   context.read<TaskController>().captureStampedPhoto();
