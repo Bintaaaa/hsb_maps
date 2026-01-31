@@ -8,12 +8,14 @@ class TaskCard extends StatelessWidget {
     super.key,
     required this.task,
     required this.distanceMeters,
-    required this.onTap,
+    this.onTap,
+    this.showChevron = true,
   });
 
   final DeliveryTask task;
   final double? distanceMeters;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+  final bool showChevron;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,7 @@ class TaskCard extends StatelessWidget {
             ],
           ],
         ),
-        trailing: const Icon(Icons.chevron_right),
+        trailing: showChevron ? const Icon(Icons.chevron_right) : null,
       ),
     );
   }

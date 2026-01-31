@@ -1,26 +1,26 @@
 import '../models/delivery_task.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-
-final List<DeliveryTask> _tasks = const <DeliveryTask>[
+const List<DeliveryTask> tasks = <DeliveryTask>[
   DeliveryTask(
     id: 'T-001',
     title: 'Antar Paket Elektronik',
     address: 'Jl. Merdeka No. 10, Jakarta Pusat',
     notes: 'Penerima: Budi. Hubungi jika sudah sampai.',
-    location: GeoPoint(-6.175392, 106.827153),
+    location: LatLng(-6.175392, 106.827153),
   ),
   DeliveryTask(
     id: 'T-002',
     title: 'Kirim Dokumen Kontrak',
     address: 'Jl. Jenderal Sudirman No. 45, Jakarta Selatan',
     notes: 'Penerima: Sari. Paket rapih dan jangan terlipat.',
-    location: GeoPoint(-6.21462, 106.821992),
+    location: LatLng(-6.21462, 106.821992),
   ),
   DeliveryTask(
     id: 'T-003',
     title: 'Ambil & Antar Paket UMKM',
     address: 'Jl. Cikini Raya No. 88, Jakarta Pusat',
     notes: 'Konfirmasi ke pemilik toko sebelum datang.',
-    location: GeoPoint(-6.197209, 106.842833),
+    location: LatLng(-6.197209, 106.842833),
   ),
 ];

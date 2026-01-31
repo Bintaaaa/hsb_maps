@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:hsb_kurir/models/delivery_task.dart';
 import 'package:hsb_kurir/models/proof_photo.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -28,6 +29,9 @@ class TaskController extends ChangeNotifier {
 
   XFile? _picture;
   XFile? get picture => _picture;
+
+  final Map<String, ProofPhoto> _proofPhotos = {};
+  ProofPhoto? proofPhotoFor(String taskId) => _proofPhotos[taskId];
 
   Future<void> getCurrentPosition() async{
     _isLoading = true;
@@ -82,7 +86,15 @@ class TaskController extends ChangeNotifier {
   }
 
 
-  Future captureStampedPhoto() async {
+  Future<void> captureStampedPhotoFor(DeliveryTask task) async {
+    _error = null;
+    final position = _currentPosition;
+    if (position == null) {
+      _error = 'Lokasi belum tersedia. Tunggu GPS lalu coba lagi.';
+      notifyListeners();
+      return;
+    }
+
     final picker = ImagePicker();
     final source = await picker.pickImage(
       source: ImageSource.camera,
@@ -94,10 +106,10 @@ class TaskController extends ChangeNotifier {
     }
 
     final capturedAt = DateTime.now();
-    
+
     final overlayText = [
-      'Lokasi: ${_currentPosition!.latitude.toStringAsFixed(5)}, '
-          '${_currentPosition!.longitude.toStringAsFixed(5)}',
+      'Lokasi: ${position.latitude.toStringAsFixed(5)}, '
+          '${position.longitude.toStringAsFixed(5)}',
       'Jam: $capturedAt',
     ].join('\n');
 
@@ -107,6 +119,11 @@ class TaskController extends ChangeNotifier {
     );
 
     _picture = stampedFile;
+    _proofPhotos[task.id] = ProofPhoto(
+      file: stampedFile,
+      position: position,
+      capturedAt: capturedAt,
+    );
     notifyListeners();
   }
 
