@@ -6,7 +6,6 @@
         android:label="hsb_kurir"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        AIzaSyDqZuIDKy-9JbuF0GAxw_jGRwxp2ebms1Y
         <activity
             android:name=".MainActivity"
             android:exported="true"
