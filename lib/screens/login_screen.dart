@@ -40,6 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
           content: const Text('Username atau password salah.'),
           actions: [
             TextButton(
+              key: const Key('ok_button'),
               onPressed: () => Navigator.of(context).pop(),
               child: const Text('OK'),
             ),
