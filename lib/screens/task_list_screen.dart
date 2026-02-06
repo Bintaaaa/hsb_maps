@@ -12,13 +12,10 @@ class TaskListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => TaskController(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Daftar Tugas'),
-        ),
-        body: Consumer<TaskController>(builder: (context, state, _){
+    return Scaffold(
+      appBar: AppBar(title: const Text('Daftar Tugas')),
+      body: Consumer<TaskController>(
+        builder: (context, state, _) {
           final position = state.currentPosition;
           return ListView.separated(
             padding: const EdgeInsets.all(16),
@@ -35,32 +32,30 @@ class TaskListScreen extends StatelessWidget {
               }
 
               final task = tasks[index - 1];
-              final distanceMeters = position == null
-                  ? null
-                  : Geolocator.distanceBetween(
-                      position.latitude,
-                      position.longitude,
-                      task.location.latitude,
-                      task.location.longitude,
-                    );
+              final distanceMeters =
+                  position == null
+                      ? null
+                      : Geolocator.distanceBetween(
+                        position.latitude,
+                        position.longitude,
+                        task.location.latitude,
+                        task.location.longitude,
+                      );
               return TaskCard(
                 task: task,
                 distanceMeters: distanceMeters,
                 onTap: () {
-                  final controller = context.read<TaskController>();
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => ChangeNotifierProvider.value(
-                        value: controller,
-                        child: TaskDetailScreen(task: task),
-                      ),
+                      builder: (_) => TaskDetailScreen(task: task),
                     ),
                   );
                 },
               );
             },
           );
-        }),
-    ));
+        },
+      ),
+    );
   }
 }

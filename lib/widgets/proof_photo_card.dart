@@ -29,10 +29,7 @@ class ProofPhotoCard extends StatelessWidget {
             const SizedBox(height: 12),
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.file(
-                File(photo.file.path),
-                fit: BoxFit.cover,
-              ),
+              child: Image.file(File(photo.file.path), fit: BoxFit.cover),
             ),
             const SizedBox(height: 12),
             Text('Waktu: ${formatter.format(photo.capturedAt)}'),

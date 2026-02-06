@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hsb_kurir/models/delivery_task.dart';
 import 'package:hsb_kurir/screens/controller/task_controller.dart';
+import 'package:hsb_kurir/screens/maps_detail_screen.dart';
 import 'package:hsb_kurir/widgets/location_status_card.dart';
 import 'package:hsb_kurir/widgets/proof_photo_card.dart';
 import 'package:hsb_kurir/widgets/task_card.dart';
@@ -15,20 +16,30 @@ class TaskDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Detail Tugas'),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(24),
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => MapsDetailScreen(task: task)),
+            );
+          },
+          child: const Text('Lihat Maps'),
+        ),
       ),
+      appBar: AppBar(title: const Text('Detail Tugas')),
       body: Consumer<TaskController>(
         builder: (context, state, _) {
           final position = state.currentPosition;
-          final distanceMeters = position == null
-              ? null
-              : Geolocator.distanceBetween(
-                  position.latitude,
-                  position.longitude,
-                  task.location.latitude,
-                  task.location.longitude,
-                );
+          final distanceMeters =
+              position == null
+                  ? null
+                  : Geolocator.distanceBetween(
+                    position.latitude,
+                    position.longitude,
+                    task.location.latitude,
+                    task.location.longitude,
+                  );
           final proofPhoto = state.proofPhotoFor(task.id);
           final canCapture =
               position != null && !state.isLoading && state.error == null;
@@ -72,9 +83,10 @@ class TaskDetailScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               ElevatedButton.icon(
-                onPressed: canCapture
-                    ? () => state.captureStampedPhotoFor(task)
-                    : null,
+                onPressed:
+                    canCapture
+                        ? () => state.captureStampedPhotoFor(task)
+                        : null,
                 icon: const Icon(Icons.camera_alt),
                 label: const Text('Ambil Foto Bukti'),
               ),

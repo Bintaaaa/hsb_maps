@@ -10,13 +10,13 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:math';
 
 class TaskController extends ChangeNotifier {
-
-  TaskController(){
+  TaskController() {
     getCurrentPosition();
   }
 
   StreamSubscription<Position>? _streamCurrentPosition;
-  StreamSubscription<Position>? get streamCurrentPosition => _streamCurrentPosition;
+  StreamSubscription<Position>? get streamCurrentPosition =>
+      _streamCurrentPosition;
 
   Position? _currentPosition;
   Position? get currentPosition => _currentPosition;
@@ -33,7 +33,7 @@ class TaskController extends ChangeNotifier {
   final Map<String, ProofPhoto> _proofPhotos = {};
   ProofPhoto? proofPhotoFor(String taskId) => _proofPhotos[taskId];
 
-  Future<void> getCurrentPosition() async{
+  Future<void> getCurrentPosition() async {
     _isLoading = true;
     _error = null;
     notifyListeners();
@@ -66,25 +66,33 @@ class TaskController extends ChangeNotifier {
 
     await _streamCurrentPosition?.cancel();
     _streamCurrentPosition = Geolocator.getPositionStream(
-      locationSettings: LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 1)
-    ).listen((position){
-      _currentPosition = position;
-      _isLoading = false;
-      notifyListeners();
-    }, onError: (_) {
-      _isLoading = false;
-      _error = 'Gagal mendapatkan lokasi. Coba lagi.';
-      notifyListeners();
-    });
+      locationSettings: LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 1,
+      ),
+    ).listen(
+      (position) {
+        _currentPosition = position;
+        _isLoading = false;
+        notifyListeners();
+      },
+      onError: (_) {
+        _isLoading = false;
+        _error = 'Gagal mendapatkan lokasi. Coba lagi.';
+        notifyListeners();
+      },
+    );
   }
 
   capturePhoto() async {
     final pickImage = ImagePicker();
-    final source = await pickImage.pickImage(source: ImageSource.camera, imageQuality: 85);
+    final source = await pickImage.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 85,
+    );
     _picture = source;
     notifyListeners();
   }
-
 
   Future<void> captureStampedPhotoFor(DeliveryTask task) async {
     _error = null;
@@ -102,7 +110,9 @@ class TaskController extends ChangeNotifier {
     );
 
     if (source == null) {
-      throw Exception('Pengambilan foto dibatalkan.');
+      _error = 'Pengambilan foto dibatalkan.';
+      notifyListeners();
+      return;
     }
 
     final capturedAt = DateTime.now();
@@ -126,7 +136,6 @@ class TaskController extends ChangeNotifier {
     );
     notifyListeners();
   }
-
 
   Future<XFile> _drawTextOnImage({
     required XFile original,
@@ -166,15 +175,13 @@ class TaskController extends ChangeNotifier {
     );
 
     textPainter.layout(maxWidth: image.width.toDouble() - 32);
-    textPainter.paint(
-      canvas,
-      Offset(16, image.height - rectHeight + 16),
-    );
+    textPainter.paint(canvas, Offset(16, image.height - rectHeight + 16));
 
     final picture = recorder.endRecording();
     final stampedImage = await picture.toImage(image.width, image.height);
-    final byteData =
-        await stampedImage.toByteData(format: ui.ImageByteFormat.png);
+    final byteData = await stampedImage.toByteData(
+      format: ui.ImageByteFormat.png,
+    );
 
     final directory = await getTemporaryDirectory();
     final outputPath =
@@ -183,7 +190,4 @@ class TaskController extends ChangeNotifier {
     await outputFile.writeAsBytes(byteData!.buffer.asUint8List());
     return XFile(outputFile.path);
   }
-
-
-
 }
