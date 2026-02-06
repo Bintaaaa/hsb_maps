@@ -11,6 +11,8 @@ import 'dart:math';
 
 class TaskController extends ChangeNotifier {
   TaskController() {
+    _isLoading = false;
+    _error = null;
     getCurrentPosition();
   }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hsb_kurir/screens/controller/route_controller.dart';
 import 'package:hsb_kurir/screens/controller/task_controller.dart';
-import 'package:hsb_kurir/screens/task_list_screen.dart';
+import 'package:hsb_kurir/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        home: const TaskListScreen(),
+        home: const LoginScreen(),
       ),
     );
   }
