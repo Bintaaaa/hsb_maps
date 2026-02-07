@@ -160,7 +160,7 @@ class TaskController extends ChangeNotifier {
       image.width.toDouble(),
       rectHeight,
     );
-    final rectPaint = Paint()..color = Colors.black.withOpacity(0.6);
+    final rectPaint = Paint()..color = Colors.black.withValues(alpha: 0.6);
     canvas.drawRect(rect, rectPaint);
 
     final textPainter = TextPainter(
