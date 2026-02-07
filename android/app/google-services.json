@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "448244556927",
+    "project_id": "deployment-bd870",
+    "storage_bucket": "deployment-bd870.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448244556927:android:a87297cdd5a80e37710b4a",
+        "android_client_info": {
+          "package_name": "com.example.hsb_kurir"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAReNFC-X5l6aL4CETilGEcqMXKUAO5NdY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
