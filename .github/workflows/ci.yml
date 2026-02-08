@@ -59,7 +59,7 @@ jobs:
           path: build/app/outputs/flutter-apk
       
       - name: Install Firebase CLI
-        run: npm -i firebase-tools
+        run: npm i -g firebase-tools
       
       - name: Upload to Firebase App Distribution
         env:
