@@ -48,3 +48,27 @@ jobs:
           name: app-release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
   
+  upload:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: app-release-apk
+          path: build/app/outputs/flutter-apk
+      
+      - name: Install Firebase CLI
+        run: npm -i firebase-tools
+      
+      - name: Upload to Firebase App Distribution
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_APP_ID_ANDROID: ${{ secrets.FIREBASE_APP_ID_ANDROID }}
+        run: |
+          firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
+            --app "$FIREBASE_APP_ID_ANDROID" \
+            --release-notes "CI build $GITHUB_SHA"
+
+
+  
